@@ -1,5 +1,8 @@
 const Book = require("../models/book");
 
+const index = (req, res) => {
+	res.send("NOT IMPLEMENTED: Site Home Page");
+};
 const book_list = (req, res) => {
 	res.send("NOT IMPLEMENTED: Book list");
 };
@@ -26,6 +29,7 @@ const book_update_post = (req, res) => {
 };
 
 module.exports = {
+	index,
 	book_list,
 	book_detail,
 	book_create_get,
