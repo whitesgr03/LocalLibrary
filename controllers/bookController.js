@@ -6,28 +6,21 @@ const Genre = require("../models/genre");
 const BookInstance = require("../models/bookinstance");
 
 const index = asyncHandler(async (req, res, next) => {
-	const [
-		numBooks,
-		numBookInstances,
-		nunAvailableBookInstances,
-		numAuthors,
-		numGenres,
-	] = await Promise.all([
-		Book.countDocuments().exec(),
-		BookInstance.countDocuments().exec(),
-		BookInstance.countDocuments({ status: "Available" }).exec(),
-		Author.countDocuments().exec(),
-		Genre.countDocuments().exec(),
-	]);
-
+	const numBooks = Book.countDocuments().exec();
+	const numBookInstances = BookInstance.countDocuments().exec();
+	const nunAvailableBookInstances = BookInstance.countDocuments({
+		status: "Available",
+	}).exec();
+	const numAuthors = Author.countDocuments().exec();
+	const numGenres = Genre.countDocuments().exec();
 
 	res.render("index", {
 		title: "Local Library Home",
-		book_count: numBooks,
-		book_instance_count: numBookInstances,
-		book_instance_available_count: nunAvailableBookInstances,
-		author_count: numAuthors,
-		genre_count: numGenres,
+		book_count: await numBooks,
+		book_instance_count: await numBookInstances,
+		book_instance_available_count: await nunAvailableBookInstances,
+		author_count: await numAuthors,
+		genre_count: await numGenres,
 	});
 });
 const book_list = asyncHandler(async (req, res, next) => {
