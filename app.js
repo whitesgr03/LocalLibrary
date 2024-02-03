@@ -51,9 +51,6 @@ const main = async () => {
 	} catch (err) {
 		console.log("Debug: Should be connected?");
 		console.error(err);
-	} finally {
-		console.log("Debug: Closing mongoose");
-		mongoose.connection.close();
 	}
 };
 
