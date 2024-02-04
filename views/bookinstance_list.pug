@@ -13,7 +13,7 @@ block content
                     span.text-danger #{item.status}
                 else 
                     span.text-warning #{item.status}
-                br
+
                 if item.status != 'Available'
                     span (Due: #{item.due_back})
                 hr
