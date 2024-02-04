@@ -4,7 +4,12 @@ const Genre = require("../models/genre");
 const Book = require("../models/book");
 
 const genre_list = asyncHandler(async (req, res, next) => {
-	res.send("NOT IMPLEMENTED: Genre list");
+	const allGenres = await Genre.find().sort({ name: 1 }).exec();
+
+	res.render("genre_list", {
+		title: "Genre List",
+		genre_list: allGenres,
+	});
 });
 const genre_detail = asyncHandler(async (req, res, next) => {
 	res.send(`NOT IMPLEMENTED: Genre detail: ${req.params.id}`);
