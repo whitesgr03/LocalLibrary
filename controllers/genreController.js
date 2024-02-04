@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 
 const Genre = require("../models/genre");
+const Book = require("../models/book");
 
 const genre_list = asyncHandler(async (req, res, next) => {
 	res.send("NOT IMPLEMENTED: Genre list");
