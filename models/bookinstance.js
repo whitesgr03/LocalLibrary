@@ -22,6 +22,13 @@ const BookInstanceSchema = new Schema(
 					return `/catalog/bookinstance/${this._id}`;
 				},
 			},
+			due_back_formatted: {
+				get() {
+					return DateTime.fromJSDate(this.due_back).toLocaleString(
+						DateTime.DATE_MED
+					);
+				},
+			},
 		},
 	}
 );
