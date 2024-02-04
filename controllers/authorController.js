@@ -4,7 +4,7 @@ const Author = require("../models/author");
 
 const author_list = asyncHandler(async (req, res, next) => {
 	const allAuthors = await Author.find().sort({ family_name: 1 }).exec();
-	console.log(allAuthors);
+
 	res.render("author_list", {
 		title: "Author List",
 		author_list: allAuthors,
