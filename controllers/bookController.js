@@ -33,7 +33,26 @@ const book_list = asyncHandler(async (req, res, next) => {
 	res.render("book_list", { title: "Book List", book_list: allBooks });
 });
 const book_detail = asyncHandler(async (req, res, next) => {
-	res.send(`NOT IMPLEMENTED: Book detail: ${req.params.id}`);
+	const [book, bookInstances] = await Promise.all([
+		Book.findById(req.params.id)
+			.populate("author")
+			.populate("genre")
+			.exec(),
+		BookInstance.find({ book: req.params.id }).exec(),
+	]);
+
+	const bookNotFound = () => {
+		const err = new Error("Book not found");
+		err.status = 404;
+		return next(err);
+	};
+
+	book === null
+		? bookNotFound()
+		: res.render("book_detail", {
+				book,
+				book_instances: bookInstances,
+		  });
 });
 const book_create_get = asyncHandler(async (req, res, next) => {
 	res.send("NOT IMPLEMENTED: Book create GET");
