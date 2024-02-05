@@ -11,7 +11,22 @@ const bookinstance_list = asyncHandler(async (req, res, next) => {
 	});
 });
 const bookinstance_detail = asyncHandler(async (req, res, next) => {
-	res.send(`NOT IMPLEMENTED: BookInstance detail: ${req.params.id}`);
+	const bookInstance = await BookInstance.findById(req.params.id)
+		.populate("book")
+		.exec();
+
+	const bookInstanceNotFound = () => {
+		const err = new Error("BookInstance not found");
+		err.status = 404;
+		return next(err);
+	};
+
+	bookInstance === null
+		? bookInstanceNotFound()
+		: res.render("bookInstance_detail", {
+				title: "Book",
+				bookInstance,
+		  });
 });
 const bookinstance_create_get = asyncHandler(async (req, res, next) => {
 	res.send("NOT IMPLEMENTED: BookInstance create GET");
