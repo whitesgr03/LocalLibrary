@@ -6,7 +6,8 @@ block content
     if genre_list.length 
         ul
             each genre in genre_list
-                li #[a(href=genre.url)= genre.name]
+                li 
+                    a(href=genre.url)= genre.name
                 hr
     else
         p There are no genres.
