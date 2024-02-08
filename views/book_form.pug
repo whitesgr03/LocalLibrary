@@ -6,7 +6,7 @@ block content
     form(method='POST')
         div.form-group
             label(for='title') Title:
-            input#title.form-control(type='text', placeholder='Name of book' name='title' required value=(book === undefined ? '' : book.title))
+            input#title.form-control(type='text', placeholder='Name of book' name='title' required value=(book ? book.title : ''))
 
         div.form-group
             label(for='author') Author:
@@ -20,11 +20,11 @@ block content
 
         div.form-group
             label(for='summary') Summary:
-            textarea#summary.form-control(placeholder='Summary' name='summary' required)= book === undefined ? '' : book.summary
+            textarea#summary.form-control(placeholder='Summary' name='summary' required)= book ?  book.summary : '';
 
         div.form-group
             label(for='isbn') ISBN:
-            input#isbn.form-control(type='text', placeholder='ISBN13' name='isbn' required value=(book === undefined ? '' : book.isbn))
+            input#isbn.form-control(type='text', placeholder='ISBN13' name='isbn' required value=(book ? book.isbn : ''))
 
         div.form-group
             label(for='genre') Genre:
