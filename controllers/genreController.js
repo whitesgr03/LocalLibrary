@@ -32,12 +32,9 @@ const genre_detail = asyncHandler(async (req, res, next) => {
 				genre_books: booksInGenre,
 		  });
 });
-const genre_create_get = asyncHandler(async (req, res, next) => {
-	res.send("NOT IMPLEMENTED: Genre create GET");
-});
-const genre_create_post = asyncHandler(async (req, res, next) => {
-	res.send("NOT IMPLEMENTED: Genre create POST");
-});
+const genre_create_get = (req, res, next) => {
+	res.render("genre_form", { title: "Create genre" });
+};
 const genre_delete_get = asyncHandler(async (req, res, next) => {
 	res.send("NOT IMPLEMENTED: Genre delete GET");
 });
