@@ -72,8 +72,6 @@ const bookinstance_create_post = [
 				.sort({ title: 1 })
 				.exec();
 
-			console.log("bookinstance", bookinstance);
-
 			res.render("bookinstance_form", {
 				title: "Create BookInstance",
 				book_list: allBooks,
