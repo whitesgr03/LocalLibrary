@@ -15,8 +15,7 @@ const genre_list = asyncHandler(async (req, res, next) => {
 const genre_detail = asyncHandler(async (req, res, next) => {
 	const [genre, booksInGenre] = await Promise.all([
 		Genre.findById(req.params.id).exec(),
-		Book.find({ genre: req.params.id }, ["title", "summary"])
-		.exec(),
+		Book.find({ genre: req.params.id }, ["title", "summary"]).exec(),
 	]);
 
 	const genreNotFound = () => {
