@@ -35,6 +35,37 @@ const genre_detail = asyncHandler(async (req, res, next) => {
 const genre_create_get = (req, res, next) => {
 	res.render("genre_form", { title: "Create genre" });
 };
+const genre_create_post = [
+	body("name", "Genre name must contain at least 3 characters")
+		.trim()
+		.isLength({ min: 3 })
+		.escape(),
+	asyncHandler((req, res, next) => {
+		const errors = validationResult(req);
+		const genre = new Genre({ name: req.body.name });
+
+		const isGenreExists = async () => {
+			const createGenre = async () => {
+				await genre.save();
+				res.redirect(genre.url);
+			};
+
+			const genreExists = await Genre.findOne({
+				name: req.body.name,
+			}).exec();
+
+			genreExists ? res.redirect(genreExists.url) : createGenre();
+		};
+
+		!errors.isEmpty()
+			? res.render("genre_form", {
+					title: "Create Genre",
+					genre,
+					errors: errors.array(),
+			  })
+			: isGenreExists();
+	}),
+];
 const genre_delete_get = asyncHandler(async (req, res, next) => {
 	res.send("NOT IMPLEMENTED: Genre delete GET");
 });
