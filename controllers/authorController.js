@@ -31,12 +31,9 @@ const author_detail = asyncHandler(async (req, res, next) => {
 				author_books: allBooksByAuthor,
 		  });
 });
-const author_create_get = asyncHandler(async (req, res, next) => {
-	res.send("NOT IMPLEMENTED: Author create GET");
-});
-const author_create_post = asyncHandler(async (req, res, next) => {
-	res.send("NOT IMPLEMENTED: Author create POST");
-});
+const author_create_get = (req, res, next) => {
+	res.render("author_form", { title: "Create Author" });
+};
 const author_delete_get = asyncHandler(async (req, res, next) => {
 	res.send("NOT IMPLEMENTED: Author delete GET");
 });
