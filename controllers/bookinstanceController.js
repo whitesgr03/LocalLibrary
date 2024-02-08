@@ -5,7 +5,12 @@ const BookInstance = require("../models/bookinstance");
 const Book = require("../models/book");
 
 const bookinstance_list = asyncHandler(async (req, res, next) => {
-	const allBookInstances = await BookInstance.find().populate("book").exec();
+	const allBookInstances = await BookInstance.find()
+		.sort({
+			title: 1,
+		})
+		.populate("book")
+		.exec();
 
 	res.render("bookinstance_list", {
 		title: "Book Instance List",
