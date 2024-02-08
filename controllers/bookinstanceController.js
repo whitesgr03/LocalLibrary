@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
 
 const BookInstance = require("../models/bookinstance");
+const Book = require("../models/book");
 
 const bookinstance_list = asyncHandler(async (req, res, next) => {
 	const allBookInstances = await BookInstance.find().populate("book").exec();
