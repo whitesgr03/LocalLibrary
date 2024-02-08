@@ -65,9 +65,74 @@ const book_create_get = asyncHandler(async (req, res, next) => {
 		genres: await allGenres,
 	});
 });
-const book_create_post = asyncHandler(async (req, res, next) => {
-	res.send("NOT IMPLEMENTED: Book create POST");
-});
+const book_create_post = [
+	body("title", "Title must not be empty.")
+		.trim()
+		.isLength({ min: 1 })
+		.escape(),
+	body("author", "Author must not be empty.")
+		.trim()
+		.isLength({ min: 1 })
+		.escape(),
+	body("summary", "Summary must not be empty.")
+		.trim()
+		.isLength({ min: 1 })
+		.escape(),
+	body("isbn", "ISBN must not be empty").trim().isLength({ min: 1 }).escape(),
+	body("genre.*").escape(),
+	asyncHandler(async (req, res, next) => {
+		const errors = validationResult(req);
+
+		const book = new Book({
+			title: req.body.title,
+			author: req.body.author,
+			summary: req.body.summary,
+			isbn: req.body.isbn,
+			genre: req.body.genre,
+		});
+
+		const renderError = async () => {
+			const [authors, genres] = await Promise.all([
+				Author.find().sort({ family_name: 1 }).exec(),
+				Genre.find().sort({ name: 1 }).exec(),
+			]);
+
+			const selectedGenre = genres.map(genre => {
+				const { _doc } = genre;
+				return book.genre.includes(genre._id)
+					? { ..._doc, checked: "true" }
+					: genre;
+			});
+
+			res.render("book_form", {
+				title: "Create Book",
+				authors,
+				genres: selectedGenre,
+				book,
+				errors: errors.array(),
+			});
+		};
+
+		const isBookExists = async () => {
+			const createBook = async () => {
+				await book.save();
+				res.redirect(book.url);
+			};
+
+			const bookExists = await Book.findOne({
+				title: req.body.title,
+				author: req.body.author,
+				summary: req.body.summary,
+				isbn: req.body.isbn,
+				genre: req.body.genre,
+			}).exec();
+
+			bookExists ? res.redirect(bookExists.url) : createBook();
+		};
+
+		!errors.isEmpty() ? renderError() : isBookExists();
+	}),
+];
 const book_delete_get = asyncHandler(async (req, res, next) => {
 	res.send("NOT IMPLEMENTED: Book delete GET");
 });
