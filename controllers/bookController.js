@@ -148,7 +148,25 @@ const book_delete_get = asyncHandler(async (req, res, next) => {
 		  });
 });
 const book_delete_post = asyncHandler(async (req, res, next) => {
-	res.send("NOT IMPLEMENTED: Book delete POST");
+	const [book, allBookInstancesByBook] = await Promise.all([
+		Book.findById(req.params.id, ["title"]).exec(),
+		BookInstance.find({ book: req.params.id }).exec(),
+	]);
+
+	const deleteBook = async () => {
+		await Book.findByIdAndDelete(req.body.bookId).exec();
+		res.redirect("/catalog/books");
+	};
+
+	book
+		? allBookInstancesByBook.length > 0
+			? res.render("book_delete", {
+					title: "Delete Book",
+					book,
+					book_bookInstances: allBookInstancesByBook,
+			  })
+			: deleteBook()
+		: res.redirect("/catalog/books");
 });
 const book_update_get = asyncHandler(async (req, res, next) => {
 	res.send("NOT IMPLEMENTED: Book update GET");
