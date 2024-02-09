@@ -115,7 +115,19 @@ const bookinstance_delete_get = asyncHandler(async (req, res, next) => {
 		  });
 });
 const bookinstance_delete_post = asyncHandler(async (req, res, next) => {
-	res.send("NOT IMPLEMENTED: BookInstance delete POST");
+	const bookInstance = await BookInstance.findById(
+		req.params.id,
+		"id"
+	).exec();
+
+	const deleteBookInstance = async () => {
+		await BookInstance.findByIdAndDelete(req.body.bookInstanceId).exec();
+		res.redirect("/catalog/bookInstances");
+	};
+
+	bookInstance
+		? deleteBookInstance()
+		: res.redirect("/catalog/bookInstances");
 });
 const bookinstance_update_get = asyncHandler(async (req, res, next) => {
 	res.send("NOT IMPLEMENTED: BookInstance update GET");
