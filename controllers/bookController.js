@@ -98,12 +98,11 @@ const book_create_post = [
 				Genre.find().sort({ name: 1 }).exec(),
 			]);
 
-			const selectedGenre = genres.map(genre => {
-				const { _doc } = genre;
-				return book.genre.includes(genre._id)
-					? { ..._doc, checked: "true" }
-					: genre;
-			});
+			const selectedGenre = genres.map(genre =>
+				book.genre.includes(genre._id)
+					? { ...genre._doc, checked: "true" }
+					: genre
+			);
 
 			res.render("book_form", {
 				title: "Create Book",
