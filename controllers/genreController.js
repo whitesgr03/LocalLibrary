@@ -67,7 +67,18 @@ const genre_create_post = [
 	}),
 ];
 const genre_delete_get = asyncHandler(async (req, res, next) => {
-	res.send("NOT IMPLEMENTED: Genre delete GET");
+	const [genre, allBooksByGenre] = await Promise.all([
+		Genre.findById(req.params.id).exec(),
+		Book.find({ genre: req.params.id }, ["title", "summary"]).exec(),
+	]);
+
+	genre === null
+		? res.redirect("/catalog/genres")
+		: res.render("genre_delete", {
+				title: "Delete Genre",
+				genre,
+				genre_books: allBooksByGenre,
+		  });
 });
 const genre_delete_post = asyncHandler(async (req, res, next) => {
 	res.send("NOT IMPLEMENTED: Genre delete POST");
