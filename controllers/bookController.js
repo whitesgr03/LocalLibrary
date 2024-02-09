@@ -56,13 +56,14 @@ const book_detail = asyncHandler(async (req, res, next) => {
 		  });
 });
 const book_create_get = asyncHandler(async (req, res, next) => {
-	const allAuthors = Author.find().sort({ family_name: 1 }).exec();
-	const allGenres = Genre.find().sort({ name: 1 }).exec();
-
+	const [authors, genres] = await Promise.all([
+		Author.find().sort({ family_name: 1 }).exec(),
+		Genre.find().sort({ name: 1 }).exec(),
+	]);
 	res.render("book_form", {
 		title: "Create Book",
-		authors: await allAuthors,
-		genres: await allGenres,
+		authors,
+		genres,
 	});
 });
 const book_create_post = [
