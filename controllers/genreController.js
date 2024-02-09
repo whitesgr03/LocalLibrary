@@ -81,7 +81,25 @@ const genre_delete_get = asyncHandler(async (req, res, next) => {
 		  });
 });
 const genre_delete_post = asyncHandler(async (req, res, next) => {
-	res.send("NOT IMPLEMENTED: Genre delete POST");
+	const [genre, allBooksByGenre] = await Promise.all([
+		Genre.findById(req.params.id).exec(),
+		Book.find({ genre: req.params.id }, "title summary").exec(),
+	]);
+
+	const deleteGenre = async () => {
+		await Genre.findByIdAndDelete(req.body.genreId).exec();
+		res.redirect("/catalog/genres");
+	};
+
+	genre
+		? allBooksByGenre.length > 0
+			? res.render("genre_delete", {
+					title: "Delete Genre",
+					genre,
+					genre_books: allBooksByGenre,
+			  })
+			: deleteGenre()
+		: res.redirect("/catalog/genres");
 });
 const genre_update_get = asyncHandler(async (req, res, next) => {
 	res.send("NOT IMPLEMENTED: Genre update GET");
