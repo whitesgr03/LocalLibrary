@@ -169,7 +169,24 @@ const book_delete_post = asyncHandler(async (req, res, next) => {
 		: res.redirect("/catalog/books");
 });
 const book_update_get = asyncHandler(async (req, res, next) => {
-	res.send("NOT IMPLEMENTED: Book update GET");
+	const [book, authors, genres] = await Promise.all([
+		Book.findById(req.params.id).exec(),
+		Author.find().sort({ family_name: 1 }).exec(),
+		Genre.find().sort({ name: 1 }).exec(),
+	]);
+
+	book === null
+		? res.redirect("/catalog/books")
+		: res.render("book_form", {
+				title: "Update Book",
+				book,
+				authors,
+				genres: genres.map(genre =>
+					book.genre.includes(genre._id)
+						? { ...genre._doc, checked: "true" }
+						: genre
+				),
+		  });
 });
 const book_update_post = asyncHandler(async (req, res, next) => {
 	res.send("NOT IMPLEMENTED: Book update POST");
