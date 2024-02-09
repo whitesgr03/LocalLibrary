@@ -134,7 +134,18 @@ const book_create_post = [
 	}),
 ];
 const book_delete_get = asyncHandler(async (req, res, next) => {
-	res.send("NOT IMPLEMENTED: Book delete GET");
+	const [book, allBookInstancesByBook] = await Promise.all([
+		Book.findById(req.params.id, ["title"]).exec(),
+		BookInstance.find({ book: req.params.id }).exec(),
+	]);
+
+	book === null
+		? res.redirect("/catalog/books")
+		: res.render("book_delete", {
+				title: "Delete Book",
+				book,
+				book_bookInstances: allBookInstancesByBook,
+		  });
 });
 const book_delete_post = asyncHandler(async (req, res, next) => {
 	res.send("NOT IMPLEMENTED: Book delete POST");
