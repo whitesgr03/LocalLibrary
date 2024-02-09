@@ -188,9 +188,78 @@ const book_update_get = asyncHandler(async (req, res, next) => {
 				),
 		  });
 });
-const book_update_post = asyncHandler(async (req, res, next) => {
-	res.send("NOT IMPLEMENTED: Book update POST");
-});
+const book_update_post = [
+	body("title", "Title must not be empty.")
+		.trim()
+		.isLength({ min: 1 })
+		.escape(),
+	body("author", "Author must not be empty.")
+		.trim()
+		.isLength({ min: 1 })
+		.escape(),
+	body("summary", "Summary must not be empty.")
+		.trim()
+		.isLength({ min: 1 })
+		.escape(),
+	body("isbn", "ISBN must not be empty").trim().isLength({ min: 1 }).escape(),
+	body("genre.*").escape(),
+	asyncHandler(async (req, res, next) => {
+		const errors = validationResult(req);
+
+		const book = new Book({
+			_id: req.params.id,
+			title: req.body.title,
+			author: req.body.author,
+			summary: req.body.summary,
+			isbn: req.body.isbn,
+			genre: req.body.genre,
+		});
+
+		const renderError = async () => {
+			const [authors, genres] = await Promise.all([
+				Author.find().sort({ family_name: 1 }).exec(),
+				Genre.find().sort({ name: 1 }).exec(),
+			]);
+
+			const selectedGenre = genres.map(genre =>
+				book.genre.includes(genre._id)
+					? { ...genre._doc, checked: "true" }
+					: genre
+			);
+
+			res.render("book_form", {
+				title: "Update Book",
+				authors,
+				genres: selectedGenre,
+				book,
+				errors: errors.array(),
+			});
+		};
+
+		const isBookExists = async () => {
+			const bookExists = await Book.findOne({
+				title: req.body.title,
+				author: req.body.author,
+				summary: req.body.summary,
+				isbn: req.body.isbn,
+				genre: req.body.genre,
+			}).exec();
+
+			const updateBook = async () => {
+				const updatedBook = await Book.findByIdAndUpdate(
+					req.params.id,
+					book,
+					{}
+				);
+				res.redirect(updatedBook.url);
+			};
+
+			bookExists ? res.redirect(bookExists.url) : updateBook();
+		};
+
+		!errors.isEmpty() ? renderError() : isBookExists();
+	}),
+];
 
 module.exports = {
 	index,
