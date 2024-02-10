@@ -130,7 +130,18 @@ const bookinstance_delete_post = asyncHandler(async (req, res, next) => {
 		: res.redirect("/catalog/bookInstances");
 });
 const bookinstance_update_get = asyncHandler(async (req, res, next) => {
-	res.send("NOT IMPLEMENTED: BookInstance update GET");
+	const [bookinstance, books] = await Promise.all([
+		BookInstance.findById(req.params.id).exec(),
+		Book.find({}, "title").sort({ title: 1 }).exec(),
+	]);
+
+	bookinstance === null
+		? res.redirect("/catalog/bookinstances")
+		: res.render("bookinstance_form", {
+				title: "Update Book Instance",
+				bookinstance,
+				book_list: books,
+		  });
 });
 const bookinstance_update_post = asyncHandler(async (req, res, next) => {
 	res.send("NOT IMPLEMENTED: BookInstance update POST");
