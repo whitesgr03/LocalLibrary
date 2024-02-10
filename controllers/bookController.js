@@ -244,8 +244,7 @@ const book_update_post = [
 			const updateBook = async () => {
 				const updatedBook = await Book.findByIdAndUpdate(
 					req.params.id,
-					book,
-					{}
+					book
 				);
 				res.redirect(updatedBook.url);
 			};
