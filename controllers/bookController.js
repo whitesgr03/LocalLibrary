@@ -98,16 +98,14 @@ const book_create_post = [
 				Genre.find().sort({ name: 1 }).exec(),
 			]);
 
-			const selectedGenre = genres.map(genre =>
-				book.genre.includes(genre._id)
-					? { ...genre._doc, checked: "true" }
-					: genre
-			);
-
 			res.render("book_form", {
 				title: "Create Book",
 				authors,
-				genres: selectedGenre,
+				genres: genres.map(genre =>
+					book.genre.includes(genre._id)
+						? { ...genre._doc, checked: "true" }
+						: genre
+				),
 				book,
 				errors: errors.array(),
 			});
@@ -221,16 +219,14 @@ const book_update_post = [
 				Genre.find().sort({ name: 1 }).exec(),
 			]);
 
-			const selectedGenre = genres.map(genre =>
-				book.genre.includes(genre._id)
-					? { ...genre._doc, checked: "true" }
-					: genre
-			);
-
 			res.render("book_form", {
 				title: "Update Book",
 				authors,
-				genres: selectedGenre,
+				genres: genres.map(genre =>
+					book.genre.includes(genre._id)
+						? { ...genre._doc, checked: "true" }
+						: genre
+				),
 				book,
 				errors: errors.array(),
 			});
