@@ -111,9 +111,40 @@ const genre_update_get = asyncHandler(async (req, res, next) => {
 				genre,
 		  });
 });
-const genre_update_post = asyncHandler(async (req, res, next) => {
-	res.send("NOT IMPLEMENTED: Genre update POST");
-});
+const genre_update_post = [
+	body("name", "Genre name must contain at least 3 characters")
+		.trim()
+		.isLength({ min: 3 })
+		.escape(),
+	asyncHandler((req, res, next) => {
+		const errors = validationResult(req);
+		const genre = new Genre({ _id: req.params.id, name: req.body.name });
+
+		const isGenreExists = async () => {
+			const genreExists = await Genre.findOne({
+				name: req.body.name,
+			}).exec();
+
+			const updateGenre = async () => {
+				const updatedGenre = await Genre.findByIdAndUpdate(
+					req.params.id,
+					genre
+				);
+				res.redirect(updatedGenre.url);
+			};
+
+			genreExists ? res.redirect(genreExists.url) : updateGenre();
+		};
+
+		!errors.isEmpty()
+			? res.render("genre_form", {
+					title: "Update Genre",
+					genre,
+					errors: errors.array(),
+			  })
+			: isGenreExists();
+	}),
+];
 
 module.exports = {
 	genre_list,
