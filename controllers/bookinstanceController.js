@@ -36,11 +36,11 @@ const bookinstance_detail = asyncHandler(async (req, res, next) => {
 		  });
 });
 const bookinstance_create_get = asyncHandler(async (req, res, next) => {
-	const allBooks = await Book.find({}, "title").sort({ title: 1 }).exec();
+	const books = await Book.find({}, "title").sort({ title: 1 }).exec();
 
 	res.render("bookinstance_form", {
 		title: "Create BookInstance",
-		book_list: allBooks,
+		book_list: books,
 	});
 });
 const bookinstance_create_post = [
@@ -65,13 +65,13 @@ const bookinstance_create_post = [
 		});
 
 		const renderError = async () => {
-			const allBooks = await Book.find({}, "title")
+			const books = await Book.find({}, "title")
 				.sort({ title: 1 })
 				.exec();
 
 			res.render("bookinstance_form", {
 				title: "Create BookInstance",
-				book_list: allBooks,
+				book_list: books,
 				bookinstance,
 				errors: errors.array(),
 			});
