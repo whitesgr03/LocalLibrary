@@ -127,7 +127,14 @@ const author_delete_post = asyncHandler(async (req, res, next) => {
 		: res.redirect("/catalog/authors");
 });
 const author_update_get = asyncHandler(async (req, res, next) => {
-	res.send("NOT IMPLEMENTED: Author update GET");
+	const author = await Author.findById(req.params.id).exec();
+
+	author === null
+		? res.redirect("/catalog/authors")
+		: res.render("author_form", {
+				title: "Update author",
+				author,
+		  });
 });
 const author_update_post = asyncHandler(async (req, res, next) => {
 	res.send("NOT IMPLEMENTED: Author update POST");
