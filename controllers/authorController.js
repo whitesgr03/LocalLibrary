@@ -83,7 +83,7 @@ const author_create_post = [
 		};
 
 		!errors.isEmpty()
-			? res.render("Author_form", {
+			? res.render("author_form", {
 					title: "Create Author",
 					author,
 					errors: errors.array(),
