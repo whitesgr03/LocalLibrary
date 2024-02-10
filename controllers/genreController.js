@@ -102,7 +102,14 @@ const genre_delete_post = asyncHandler(async (req, res, next) => {
 		: res.redirect("/catalog/genres");
 });
 const genre_update_get = asyncHandler(async (req, res, next) => {
-	res.send("NOT IMPLEMENTED: Genre update GET");
+	const genre = await Genre.findById(req.params.id).exec();
+
+	genre === null
+		? res.redirect("/catalog/genres")
+		: res.render("genre_form", {
+				title: "Update genre",
+				genre,
+		  });
 });
 const genre_update_post = asyncHandler(async (req, res, next) => {
 	res.send("NOT IMPLEMENTED: Genre update POST");
