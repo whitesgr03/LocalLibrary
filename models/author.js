@@ -42,6 +42,16 @@ const AuthorSchema = new Schema(
 					return `${birth} - ${death}`;
 				},
 			},
+			date_of_birth_yyyy_mm_dd: {
+				get() {
+					return DateTime.fromJSDate(this.date_of_birth).toISODate();
+				},
+			},
+			date_of_death_yyyy_mm_dd: {
+				get() {
+					return DateTime.fromJSDate(this.date_of_death).toISODate();
+				},
+			},
 		},
 	}
 );
