@@ -61,10 +61,7 @@ const bookinstance_create_post = [
 		const errors = validationResult(req);
 
 		const bookinstance = new BookInstance({
-			book: req.body.book,
-			imprint: req.body.imprint,
-			status: req.body.status,
-			due_back: req.body.due_back,
+			...req.body,
 		});
 
 		const renderError = async () => {
@@ -81,17 +78,14 @@ const bookinstance_create_post = [
 		};
 
 		const isBookInstanceExists = async () => {
+			const bookinstanceExists = await BookInstance.findOne({
+				...req.body,
+			}).exec();
+
 			const createBookInstance = async () => {
 				await bookinstance.save();
 				res.redirect(bookinstance.url);
 			};
-
-			const bookinstanceExists = await BookInstance.findOne({
-				book: req.body.book,
-				imprint: req.body.imprint,
-				status: req.body.status,
-				due_back: req.body.due_back,
-			}).exec();
 
 			bookinstanceExists
 				? res.redirect(bookinstanceExists.url)

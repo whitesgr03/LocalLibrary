@@ -85,11 +85,7 @@ const book_create_post = [
 		const errors = validationResult(req);
 
 		const book = new Book({
-			title: req.body.title,
-			author: req.body.author,
-			summary: req.body.summary,
-			isbn: req.body.isbn,
-			genre: req.body.genre,
+			...req.body,
 		});
 
 		const renderError = async () => {
@@ -113,11 +109,7 @@ const book_create_post = [
 
 		const isBookExists = async () => {
 			const bookExists = await Book.findOne({
-				title: req.body.title,
-				author: req.body.author,
-				summary: req.body.summary,
-				isbn: req.body.isbn,
-				genre: req.body.genre,
+				...req.body,
 			}).exec();
 
 			const createBook = async () => {
@@ -206,11 +198,7 @@ const book_update_post = [
 
 		const book = new Book({
 			_id: req.params.id,
-			title: req.body.title,
-			author: req.body.author,
-			summary: req.body.summary,
-			isbn: req.body.isbn,
-			genre: req.body.genre,
+			...req.body,
 		});
 
 		const renderError = async () => {
@@ -234,11 +222,7 @@ const book_update_post = [
 
 		const isBookExists = async () => {
 			const bookExists = await Book.findOne({
-				title: req.body.title,
-				author: req.body.author,
-				summary: req.body.summary,
-				isbn: req.body.isbn,
-				genre: req.body.genre,
+				...req.body,
 			}).exec();
 
 			const updateBook = async () => {

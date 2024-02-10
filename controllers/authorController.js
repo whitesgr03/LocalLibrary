@@ -59,11 +59,9 @@ const author_create_post = [
 		.toDate(),
 	asyncHandler((req, res, next) => {
 		const errors = validationResult(req);
+
 		const author = new Author({
-			first_name: req.body.first_name,
-			family_name: req.body.family_name,
-			date_of_birth: req.body.date_of_birth,
-			date_of_death: req.body.date_of_death,
+			...req.body,
 		});
 
 		const isAuthorExists = async () => {
@@ -73,10 +71,7 @@ const author_create_post = [
 			};
 
 			const authorExists = await Author.findOne({
-				first_name: req.body.first_name,
-				family_name: req.body.family_name,
-				date_of_birth: req.body.date_of_birth,
-				date_of_death: req.body.date_of_death,
+				...req.body,
 			}).exec();
 
 			authorExists ? res.redirect(authorExists.url) : createAuthor();
@@ -161,20 +156,15 @@ const author_update_post = [
 		.toDate(),
 	asyncHandler((req, res, next) => {
 		const errors = validationResult(req);
+
 		const author = new Author({
 			_id: req.params.id,
-			first_name: req.body.first_name,
-			family_name: req.body.family_name,
-			date_of_birth: req.body.date_of_birth,
-			date_of_death: req.body.date_of_death,
+			...req.body,
 		});
 
 		const isAuthorExists = async () => {
 			const authorExists = await Author.findOne({
-				first_name: req.body.first_name,
-				family_name: req.body.family_name,
-				date_of_birth: req.body.date_of_birth,
-				date_of_death: req.body.date_of_death,
+				...req.body,
 			}).exec();
 
 			const updateAuthor = async () => {

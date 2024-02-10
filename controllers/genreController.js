@@ -42,7 +42,8 @@ const genre_create_post = [
 		.escape(),
 	asyncHandler((req, res, next) => {
 		const errors = validationResult(req);
-		const genre = new Genre({ name: req.body.name });
+
+		const genre = new Genre({ ...req.body });
 
 		const isGenreExists = async () => {
 			const createGenre = async () => {
@@ -51,7 +52,7 @@ const genre_create_post = [
 			};
 
 			const genreExists = await Genre.findOne({
-				name: req.body.name,
+				...req.body,
 			}).exec();
 
 			genreExists ? res.redirect(genreExists.url) : createGenre();
@@ -118,11 +119,12 @@ const genre_update_post = [
 		.escape(),
 	asyncHandler((req, res, next) => {
 		const errors = validationResult(req);
-		const genre = new Genre({ _id: req.params.id, name: req.body.name });
+
+		const genre = new Genre({ _id: req.params.id, ...req.body });
 
 		const isGenreExists = async () => {
 			const genreExists = await Genre.findOne({
-				name: req.body.name,
+				...req.body,
 			}).exec();
 
 			const updateGenre = async () => {
