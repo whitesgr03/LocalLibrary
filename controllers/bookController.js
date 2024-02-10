@@ -112,11 +112,6 @@ const book_create_post = [
 		};
 
 		const isBookExists = async () => {
-			const createBook = async () => {
-				await book.save();
-				res.redirect(book.url);
-			};
-
 			const bookExists = await Book.findOne({
 				title: req.body.title,
 				author: req.body.author,
@@ -124,6 +119,11 @@ const book_create_post = [
 				isbn: req.body.isbn,
 				genre: req.body.genre,
 			}).exec();
+
+			const createBook = async () => {
+				await book.save();
+				res.redirect(book.url);
+			};
 
 			bookExists ? res.redirect(bookExists.url) : createBook();
 		};
