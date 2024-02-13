@@ -5,12 +5,30 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const mongoose = require("mongoose");
+const compression = require("compression");
+const helmet = require("helmet");
 
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 const catalogRouter = require("./routes/catalog");
+const rateLimit = require("express-rate-limit");
+
+const limiter = rateLimit({
+	windowMs: 1 * 60 * 1000,
+	limit: 20,
+});
 
 const app = express();
+
+app.use(limiter);
+app.use(compression());
+app.use(
+	helmet.contentSecurityPolicy({
+		directives: {
+			"script-src": ["'self'", "code.jquery.com", "cdn.jsdelivr.net"],
+		},
+	})
+);
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -42,7 +60,7 @@ app.use((err, req, res, next) => {
 	res.render("error");
 });
 
-const uri = process.env.connectionString || null;
+const uri = process.env.MONGODB_URI || null;
 
 const main = async () => {
 	try {
