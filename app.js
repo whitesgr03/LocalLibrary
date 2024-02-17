@@ -1,3 +1,5 @@
+const log = require("debug")("localLibrary:mongoose");
+
 require("dotenv").config();
 const createError = require("http-errors");
 const express = require("express");
@@ -64,10 +66,11 @@ const uri = process.env.MONGODB_URI || null;
 
 const main = async () => {
 	try {
-		console.log("Debug: About to connect");
+		log("Start connecting");
 		await mongoose.connect(uri);
+		log("Connecting successfully");
 	} catch (err) {
-		console.log("Debug: Should be connected?");
+		log("Should be connected?");
 		console.error(err);
 	}
 };
