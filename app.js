@@ -1,14 +1,12 @@
-const log = require("debug")("localLibrary:mongoose");
-
 require("dotenv").config();
 const createError = require("http-errors");
 const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
-const mongoose = require("mongoose");
 const compression = require("compression");
 const helmet = require("helmet");
+require("./config/database");
 
 const indexRouter = require("./routes/index");
 const catalogRouter = require("./routes/catalog");
@@ -59,20 +57,5 @@ app.use((err, req, res, next) => {
 	res.status(err.status || 500);
 	res.render("error");
 });
-
-const uri = process.env.MONGODB_URI || null;
-
-const main = async () => {
-	try {
-		log("Start connecting");
-		await mongoose.connect(uri);
-		log("Connecting successfully");
-	} catch (err) {
-		log("Should be connected?");
-		console.error(err);
-	}
-};
-
-main();
 
 module.exports = app;
