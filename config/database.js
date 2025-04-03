@@ -1,3 +1,4 @@
+require("dotenv").config();
 const log = require("debug")("localLibrary:mongoose");
 const mongoose = require("mongoose");
 
