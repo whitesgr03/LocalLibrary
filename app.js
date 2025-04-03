@@ -6,15 +6,16 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const compression = require("compression");
 const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
+
 require("./config/database");
 
 const indexRouter = require("./routes/index");
 const catalogRouter = require("./routes/catalog");
-const rateLimit = require("express-rate-limit");
 
 const limiter = rateLimit({
-	windowMs: 1 * 60 * 1000,
-	limit: 20,
+	windowMs: 10 * 60 * 1000,
+	limit: 200,
 });
 
 const app = express();
