@@ -6,7 +6,7 @@
 	},
 	"private": true,
 	"scripts": {
-		"start": "DEBUG=localLibrary:* node ./bin/www",
+		"start": "NODE_ENV=production DEBUG=localLibrary:* node ./bin/www",
 		"watch": "DEBUG=localLibrary:* node --watch ./bin/www"
 	},
 	"dependencies": {
